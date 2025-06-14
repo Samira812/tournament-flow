@@ -1,5 +1,7 @@
 package com.example.chess_tournament.trf;
 
+import com.example.chess_tournament.model.Player;
+import com.example.chess_tournament.model.Tournament;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
