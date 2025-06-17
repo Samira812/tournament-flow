@@ -1,12 +1,19 @@
 package com.example.chess_tournament.pairing;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.example.chess_tournament.model.Tournament;
+import com.example.chess_tournament.repository.TournamentRepository;
 
 import java.io.*;
 import java.util.*;
 
 @Service
 public class JaVaFoService {
+
+    @Autowired
+    private TournamentRepository tournamentRepository;
 
     private static final Map<String, String> TIEBREAKER_MAP = Map.of(
             "DirectEncounter", "1",
@@ -18,6 +25,10 @@ public class JaVaFoService {
             "CumulativeOpponent", "7");
 
     private static final String DEFAULT_TIEBREAKERS = "1,3,2"; // DirectEncounter, BuchholzCut1, Buchholz
+
+    public Tournament getTournamentById(Long id) {
+        return tournamentRepository.findById(id).orElse(null);
+    }
 
     public String runPairing(String trfFile, List<String> tieBreakers) {
         try {
