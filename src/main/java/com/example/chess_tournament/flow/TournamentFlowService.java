@@ -2,6 +2,7 @@ package com.example.chess_tournament.flow;
 
 import com.example.chess_tournament.pairing.JaVaFoService;
 import com.example.chess_tournament.results.RecordResultsService;
+import com.example.chess_tournament.results.RecordResultsService.MatchInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,15 +18,17 @@ public class TournamentFlowService {
         this.javaFoService = javaFoService;
     }
 
-    public String runRound(String jsonFile, String trfFile, List<String> tieBreakers) {
-        String recordResult = resultsService.updateTrfFromJson(jsonFile, trfFile);
-        if (!recordResult.startsWith("R"))
+    // record round results and generate next round pairings
+    public String runRound(List<MatchInfo> matches, String trfFile, List<String> tieBreakers) {
+        String recordResult = resultsService.updateTrfFromResults(matches, trfFile);
+        if (!recordResult.startsWith("R") && !recordResult.startsWith("Results"))
             return recordResult;
 
         String pairingResult = javaFoService.runPairing(trfFile, tieBreakers);
         return recordResult + "\n" + pairingResult;
     }
 
+    // starting first round in tournament
     public String startFirstRound(String trfFile, List<String> tieBreakers) {
         return javaFoService.runPairing(trfFile, tieBreakers);
     }

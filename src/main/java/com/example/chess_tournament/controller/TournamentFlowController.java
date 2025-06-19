@@ -1,6 +1,8 @@
 package com.example.chess_tournament.controller;
 
 import com.example.chess_tournament.flow.TournamentFlowService;
+import com.example.chess_tournament.results.RecordResultsService;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public class TournamentFlowController {
         this.flowService = flowService;
     }
 
+    // starts the first round
     @GetMapping("/start")
     public String startTournament(
             @RequestParam String trfFile,
@@ -22,12 +25,13 @@ public class TournamentFlowController {
         return flowService.startFirstRound(trfFile, tiebreakers);
     }
 
-    @GetMapping("/next")
+    // generate next round
+    @PostMapping("/next")
     public String runNextRound(
-            @RequestParam String jsonFile,
+            @RequestBody List<RecordResultsService.MatchInfo> matches,
             @RequestParam String trfFile,
             @RequestParam(required = false) List<String> tiebreakers) {
-        return flowService.runRound(jsonFile, trfFile, tiebreakers);
+        return flowService.runRound(matches, trfFile, tiebreakers);
     }
 
 }

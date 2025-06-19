@@ -13,6 +13,7 @@ public class TrfController {
     @Autowired
     private TournamentRepository tournamentRepository;
 
+    // main use in first round
     @GetMapping("/generate/{tournamentId}")
     public String generateTrf(@PathVariable Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId).orElse(null);

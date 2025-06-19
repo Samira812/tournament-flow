@@ -1,7 +1,10 @@
 package com.example.chess_tournament.controller;
 
 import com.example.chess_tournament.results.RecordResultsService;
+import com.example.chess_tournament.results.RecordResultsService.MatchInfo;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/results")
@@ -13,10 +16,12 @@ public class ResultsController {
         this.resultsService = resultsService;
     }
 
-    @GetMapping("/record-json")
-    public String recordFromJson(
-            @RequestParam String jsonFile,
+    // record round results to TRF
+    @PostMapping("/record")
+    public String recordResults(
+            @RequestBody List<MatchInfo> matches,
             @RequestParam(defaultValue = "report.trf") String trfFile) {
-        return resultsService.updateTrfFromJson(jsonFile, trfFile);
+        return resultsService.updateTrfFromResults(matches, trfFile);
     }
+
 }

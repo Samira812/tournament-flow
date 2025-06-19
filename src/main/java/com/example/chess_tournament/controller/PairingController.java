@@ -4,7 +4,6 @@ import com.example.chess_tournament.model.Tournament;
 import com.example.chess_tournament.repository.TournamentRepository;
 import com.example.chess_tournament.pairing.JaVaFoService;
 import com.example.chess_tournament.utils.TournamentToTRF;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -16,12 +15,12 @@ public class PairingController {
     private final JaVaFoService javaFoService;
     private final TournamentRepository tournamentRepository;
 
-    @Autowired
     public PairingController(JaVaFoService javaFoService, TournamentRepository tournamentRepository) {
         this.javaFoService = javaFoService;
         this.tournamentRepository = tournamentRepository;
     }
 
+    // generate pairings from TRF file (for next rounds)
     @GetMapping("/generate")
     public String generatePairing(
             @RequestParam(defaultValue = "report.trf") String trfFile,
@@ -29,6 +28,7 @@ public class PairingController {
         return javaFoService.runPairing(trfFile, tiebreakers);
     }
 
+    // generate TRF file from objects then generate pairings (for first round)
     @GetMapping("/generate2")
     public String generatePairing2(
             @RequestParam Long tournamentId,
