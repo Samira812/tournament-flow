@@ -1,9 +1,11 @@
 package com.example.chess_tournament.controller;
 
+import com.example.chess_tournament.dto.PairingDTO;
 import com.example.chess_tournament.model.Tournament;
 import com.example.chess_tournament.repository.TournamentRepository;
-import com.example.chess_tournament.pairing.JaVaFoService;
+import com.example.chess_tournament.service.JaVaFoService;
 import com.example.chess_tournament.utils.TournamentToTRF;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -46,6 +48,12 @@ public class PairingController {
 
         // run JaVaFo
         return javaFoService.runPairing(trfFile, tiebreakers);
+    }
+
+    // to present standings
+    @GetMapping("/current")
+    public List<PairingDTO> getCurrentPairings(@RequestParam(defaultValue = "report.trf") String trfFile) {
+        return javaFoService.getCurrentPairings(trfFile);
     }
 
 }

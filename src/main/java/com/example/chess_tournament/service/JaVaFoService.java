@@ -1,10 +1,11 @@
-package com.example.chess_tournament.pairing;
+package com.example.chess_tournament.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.chess_tournament.model.Tournament;
 import com.example.chess_tournament.repository.TournamentRepository;
+import com.example.chess_tournament.dto.PairingDTO;
 
 import java.io.*;
 import java.util.*;
@@ -108,4 +109,53 @@ public class JaVaFoService {
             }
         }
     }
+
+    public List<PairingDTO> getCurrentPairings(String trfPath) {
+        List<PairingDTO> pairings = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(trfPath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.startsWith("001"))
+                    continue;
+
+                int playerId = Integer.parseInt(line.substring(3, 7).trim());
+                String playerName = line.substring(12, 45).trim();
+
+                // Parse last opponent + color + result (assumed latest round)
+                String[] tokens = line.trim().split("\\s+");
+                if (tokens.length >= 4) {
+                    String opponentStr = tokens[tokens.length - 3];
+                    String color = tokens[tokens.length - 2];
+                    String result = tokens[tokens.length - 1];
+
+                    int opponentId = Integer.parseInt(opponentStr);
+
+                    // Get opponent name
+                    BufferedReader reader2 = new BufferedReader(new FileReader(trfPath));
+                    String oppLine;
+                    String opponentName = "";
+                    while ((oppLine = reader2.readLine()) != null) {
+                        if (oppLine.startsWith("001")) {
+                            int pid = Integer.parseInt(oppLine.substring(3, 7).trim());
+                            if (pid == opponentId) {
+                                opponentName = oppLine.substring(12, 45).trim();
+                                break;
+                            }
+                        }
+                    }
+                    reader2.close();
+
+                    if (color.equalsIgnoreCase("w")) {
+                        pairings.add(new PairingDTO(pairings.size() + 1, playerName, opponentName, result));
+                    } else {
+                        pairings.add(new PairingDTO(pairings.size() + 1, opponentName, playerName, result));
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pairings;
+    }
+
 }

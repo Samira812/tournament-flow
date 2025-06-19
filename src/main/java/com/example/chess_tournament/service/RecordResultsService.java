@@ -1,4 +1,4 @@
-package com.example.chess_tournament.results;
+package com.example.chess_tournament.service;
 
 import org.springframework.stereotype.Service;
 

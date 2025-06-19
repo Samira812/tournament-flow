@@ -1,8 +1,9 @@
 package com.example.chess_tournament.controller;
 
-import com.example.chess_tournament.results.RecordResultsService;
-import com.example.chess_tournament.results.RecordResultsService.MatchInfo;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.chess_tournament.service.RecordResultsService;
+import com.example.chess_tournament.service.RecordResultsService.MatchInfo;
 
 import java.util.List;
 

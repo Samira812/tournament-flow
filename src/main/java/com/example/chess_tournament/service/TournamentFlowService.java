@@ -1,8 +1,7 @@
-package com.example.chess_tournament.flow;
+package com.example.chess_tournament.service;
 
-import com.example.chess_tournament.pairing.JaVaFoService;
-import com.example.chess_tournament.results.RecordResultsService;
-import com.example.chess_tournament.results.RecordResultsService.MatchInfo;
+import com.example.chess_tournament.service.RecordResultsService.MatchInfo;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
