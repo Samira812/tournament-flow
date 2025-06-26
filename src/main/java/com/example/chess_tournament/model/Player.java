@@ -39,6 +39,11 @@ public class Player {
 
     private int rank;
 
+<<<<<<< HEAD
+=======
+    private int confirmAttendance;
+
+>>>>>>> 92d7ca1 (connrcting to front changes)
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
