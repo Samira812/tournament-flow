@@ -4,12 +4,15 @@ import com.example.chess_tournament.model.Player;
 import com.example.chess_tournament.model.Tournament;
 import com.example.chess_tournament.repository.PlayerRepository;
 import com.example.chess_tournament.repository.TournamentRepository;
+
 import com.example.chess_tournament.dto.PlayerRequest;
 import com.example.chess_tournament.dto.PlayerListRequest;
 import com.example.chess_tournament.dto.AttendanceRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/players")
@@ -21,14 +24,27 @@ public class PlayerController {
     @Autowired
     private TournamentRepository tournamentRepository;
 
-    // Create one player
+    // Create or edit one player
     @PostMapping
-    public String addPlayer(@RequestBody PlayerRequest request) {
+    public String addOrUpdatePlayer(@RequestBody PlayerRequest request) {
         Tournament tournament = tournamentRepository.findById(request.tournamentId).orElse(null);
         if (tournament == null)
             return "tournament doesn't exist";
 
-        Player player = new Player();
+        Player player;
+
+        if (request.id != null) {
+            // edit an existing player
+            player = playerRepository.findById(request.id).orElse(null);
+            if (player == null)
+                return "player doesn't exist";
+        } else {
+            // create new player
+            player = new Player();
+            player.setConfirmAttendance(0);
+            player.setTournament(tournament);
+        }
+
         player.setName(request.name);
         player.setCountry(request.country);
         player.setBirthYear(request.birthYear);
@@ -39,7 +55,7 @@ public class PlayerController {
         player.setTournament(tournament);
 
         playerRepository.save(player);
-        return "player" + player.getName() + "added successfully";
+        return "player" + player.getName() + (request.id != null ? "added" : "edited") + "successfully";
     }
 
     // Create players by list
