@@ -17,15 +17,6 @@ public class JaVaFoService {
     private TournamentRepository tournamentRepository;
 
     private static final Map<String, String> TIEBREAKER_MAP = Map.of(
-<<<<<<< HEAD
-            "DirectEncounter", "1",
-            "Buchholz", "2",
-            "BuchholzCut1", "3",
-            "BuchholzCut2", "4",
-            "Berger", "5",
-            "Cumulative", "6",
-            "CumulativeOpponent", "7");
-=======
             "Direct Encounter", "1",
             "Buchholz", "2",
             "Buchholz Cut 1", "3",
@@ -33,7 +24,6 @@ public class JaVaFoService {
             "Berger", "5",
             "Cumulative", "6",
             "Cumulative Opponent", "7");
->>>>>>> 92d7ca1 (connrcting to front changes)
 
     private static final String DEFAULT_TIEBREAKERS = "1,3,2"; // DirectEncounter, BuchholzCut1, Buchholz
 

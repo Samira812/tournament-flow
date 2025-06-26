@@ -33,13 +33,10 @@ public class Tournament {
 
     private String type; // e.g., "Individual Swiss Dutch"
 
-<<<<<<< HEAD
-=======
     private float ByeValue;
 
     private String[] tieBreakers;
 
->>>>>>> 92d7ca1 (connrcting to front changes)
     @ManyToOne
     @JoinColumn(name = "arbiter_id")
     private Arbiter arbiter;

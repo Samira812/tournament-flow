@@ -22,10 +22,7 @@ public class Arbiter {
     @Column(name = "fide_id")
     private long fideId;
 
-<<<<<<< HEAD
-=======
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
->>>>>>> 92d7ca1 (connrcting to front changes)
 }
