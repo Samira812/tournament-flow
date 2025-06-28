@@ -12,6 +12,9 @@ import com.example.chess_tournament.dto.AttendanceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/players")
 public class PlayerController {
@@ -58,11 +61,11 @@ public class PlayerController {
 
     // Create players by list
     @PostMapping("/bulk")
-    public String addPlayersBulk(@RequestBody PlayerListRequest request) {
+    public List<Player> addPlayersBulk(@RequestBody PlayerListRequest request) {
         Tournament tournament = tournamentRepository.findById(request.tournamentId).orElse(null);
         if (tournament == null)
-            return "tournamnet doesn't exist";
-
+            return null;
+        List<Player> players = new LinkedList<>();
         for (String name : request.names) {
             Player player = new Player();
             player.setName(name);
@@ -73,10 +76,11 @@ public class PlayerController {
             player.setFideId(0);
             player.setConfirmAttendance(0);
             player.setTournament(tournament);
-            playerRepository.save(player);
+            players.add(player);
         }
+        return playerRepository.saveAll(players);
 
-        return "" + request.names.size() + " players were added successfully";
+//        return "" + request.names.size() + " players were added successfully";
     }
 
     // Confirm players' attendance
