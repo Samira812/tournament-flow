@@ -33,10 +33,6 @@ public class Tournament {
 
     private String type; // e.g., "Individual Swiss Dutch"
 
-    private float ByeValue;
-
-    private String[] tieBreakers;
-
     @ManyToOne
     @JoinColumn(name = "arbiter_id")
     private Arbiter arbiter;

@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface TournamentRepository extends JpaRepository<Tournament, Long> {
-    Tournament findByName(String name);
+    Tournament findByTournamentName(String name);
 }

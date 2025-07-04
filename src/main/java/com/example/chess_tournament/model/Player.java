@@ -39,8 +39,6 @@ public class Player {
 
     private int rank;
 
-    private int confirmAttendance;
-
     @ManyToOne
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
