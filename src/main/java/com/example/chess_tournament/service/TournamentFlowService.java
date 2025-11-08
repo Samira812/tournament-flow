@@ -1,10 +1,9 @@
 package com.example.chess_tournament.service;
 
-import com.example.chess_tournament.service.RecordResultsService.MatchInfo;
-
+import com.example.chess_tournament.dto.MatchInfo;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TournamentFlowService {
@@ -18,17 +17,26 @@ public class TournamentFlowService {
     }
 
     // record round results and generate next round pairings
-    public String runRound(List<MatchInfo> matches, String trfFile, List<String> tieBreakers) {
-        String recordResult = resultsService.updateTrfFromResults(matches, trfFile);
-        if (!recordResult.startsWith("R") && !recordResult.startsWith("Results"))
-            return recordResult;
+    public Map<String, Object> runRound(List<MatchInfo> matches, String trfFile, List<String> tieBreakers) {
+        Map<String, Object> recordResult = resultsService.updateTrfFromResults(matches, trfFile);
 
-        String pairingResult = javaFoService.runPairing(trfFile, tieBreakers);
-        return recordResult + "\n" + pairingResult;
+        if (!"success".equals(recordResult.get("status"))) {
+            return recordResult;
+        }
+
+        Map<String, Object> pairingResult = javaFoService.runPairing(trfFile, tieBreakers);
+        if (!"success".equals(pairingResult.get("status"))) {
+            return pairingResult;
+        }
+
+        return Map.of(
+                "status", "success",
+                "message", "Results recorded and next round generated.");
     }
 
     // starting first round in tournament
-    public String startFirstRound(String trfFile, List<String> tieBreakers) {
-        return javaFoService.runPairing(trfFile, tieBreakers);
+    public Map<String, Object> startFirstRound(String trfFile, List<String> tieBreakers) {
+        Map<String, Object> result = javaFoService.runPairing(trfFile, tieBreakers);
+        return result;
     }
 }

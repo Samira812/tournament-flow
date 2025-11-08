@@ -12,7 +12,8 @@ public class StandingsService {
     /**
      * Reads a TRF file and extracts standings from each 001 line.
      */
-    public List<StandingDTO> getStandings(String trfPath) {
+    public Map<String, Object> getStandings(String trfPath) {
+        Map<String, Object> response = new HashMap<>();
         List<StandingDTO> standings = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(trfPath))) {
@@ -33,13 +34,19 @@ public class StandingsService {
 
                 standings.add(new StandingDTO(playerId, name, score, rank));
             }
+
+            // final standings due to rank
+            standings.sort(Comparator.comparingInt(StandingDTO::getRank));
+
+            response.put("status", "success");
+            response.put("standings", standings);
+            return response;
+
         } catch (IOException e) {
-            e.printStackTrace();
+            response.put("status", "error");
+            response.put("message", "Failed to read standings");
+            response.put("details", e.getMessage());
+            return response;
         }
-
-        // final standings due to rank
-        standings.sort(Comparator.comparingInt(StandingDTO::getRank));
-
-        return standings;
     }
 }

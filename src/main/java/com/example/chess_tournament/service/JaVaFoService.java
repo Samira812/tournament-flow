@@ -17,13 +17,13 @@ public class JaVaFoService {
     private TournamentRepository tournamentRepository;
 
     private static final Map<String, String> TIEBREAKER_MAP = Map.of(
-            "DirectEncounter", "1",
+            "Direct Encounter", "1",
             "Buchholz", "2",
-            "BuchholzCut1", "3",
-            "BuchholzCut2", "4",
+            "Buchholz Cut 1", "3",
+            "Buchholz Cut 2", "4",
             "Berger", "5",
             "Cumulative", "6",
-            "CumulativeOpponent", "7");
+            "Cumulative Opponent", "7");
 
     private static final String DEFAULT_TIEBREAKERS = "1,3,2"; // DirectEncounter, BuchholzCut1, Buchholz
 
@@ -31,7 +31,8 @@ public class JaVaFoService {
         return tournamentRepository.findById(id).orElse(null);
     }
 
-    public String runPairing(String trfFile, List<String> tieBreakers) {
+    public Map<String, Object> runPairing(String trfFile, List<String> tieBreakers) {
+        Map<String, Object> response = new HashMap<>();
         try {
             String tbArgument = (tieBreakers == null || tieBreakers.isEmpty())
                     ? DEFAULT_TIEBREAKERS
@@ -65,10 +66,16 @@ public class JaVaFoService {
                 ensureTieBreakersInTrf(new File(trfFile), tbArgument);
             }
 
-            return "Pairing done.\n" + output;
+            response.put("status", "success");
+            response.put("message", "Pairing completed successfully");
+            response.put("output", output.toString());
+            return response;
 
         } catch (Exception e) {
-            return "Failed to run JaVaFo: " + e.getMessage();
+            response.put("status", "error");
+            response.put("message", "Failed to run pairing");
+            return response;
+
         }
     }
 

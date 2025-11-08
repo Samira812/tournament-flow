@@ -1,5 +1,6 @@
 package com.example.chess_tournament.service;
 
+import com.example.chess_tournament.dto.MatchInfo;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -8,14 +9,8 @@ import java.util.*;
 @Service
 public class RecordResultsService {
 
-    // a class represents each match
-    public static class MatchInfo {
-        public int whiteId;
-        public int blackId;
-        public String result;
-    }
-
-    public String updateTrfFromResults(List<MatchInfo> matches, String trfPath) {
+    public Map<String, Object> updateTrfFromResults(List<MatchInfo> matches, String trfPath) {
+        Map<String, Object> response = new HashMap<>();
 
         // map that joins between player and info that need to be added to his line
         Map<Integer, List<String>> additions = new HashMap<>();
@@ -62,16 +57,27 @@ public class RecordResultsService {
             }
 
         } catch (IOException e) {
-            return "Failed to update TRF: " + e.getMessage();
+            response.put("status", "error");
+            response.put("message", "Failed to update TRF");
+            response.put("details", e.getMessage());
+            return response;
         }
 
         // delete previous file and assign the new one
-        if (!inputFile.delete())
-            return "Failed to delete original file.";
-        if (!tempFile.renameTo(inputFile))
-            return "Failed to rename temp file.";
+        if (!inputFile.delete()) {
+            response.put("status", "error");
+            response.put("message", "Failed to delete original file.");
+            return response;
+        }
+        if (!tempFile.renameTo(inputFile)) {
+            response.put("status", "error");
+            response.put("message", "Failed to rename temp file.");
+            return response;
+        }
 
-        return "Results recorded successfully.";
+        response.put("status", "success");
+        response.put("message", "Results recorded successfully.");
+        return response;
     }
 
     private String reverseResult(String result) {

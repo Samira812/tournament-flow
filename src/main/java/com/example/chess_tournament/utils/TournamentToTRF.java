@@ -1,6 +1,6 @@
 package com.example.chess_tournament.utils;
 
-import com.example.chess_tournament.model.Arbiter;
+import com.example.chess_tournament.model.Organizer;
 import com.example.chess_tournament.model.Player;
 import com.example.chess_tournament.model.Tournament;
 
@@ -52,13 +52,13 @@ public abstract class TournamentToTRF {
         replaceField(outputLines, "062", "062 " + players.size());
         replaceField(outputLines, "092", "092 " + tournament.getType());
 
-        Arbiter arbiter = tournament.getArbiter();
-        if (arbiter != null) {
-            String arbiterLine = String.format("102 %s %s (%d)",
-                    arbiter.getTitle(),
-                    arbiter.getName(),
-                    arbiter.getFideId());
-            replaceField(outputLines, "102", arbiterLine);
+        Organizer organizer = tournament.getOrganizer();
+        if (organizer != null) {
+            String organizerLine = String.format("102 %s %s (%d)",
+                    organizer.getTitle(),
+                    organizer.getName(),
+                    organizer.getFideId());
+            replaceField(outputLines, "102", organizerLine);
         }
 
         replaceField(outputLines, "XXR", "XXR " + tournament.getRounds());
@@ -106,14 +106,14 @@ public abstract class TournamentToTRF {
     private static String formatPlayerLine(Player p) {
         return String.format(
                 Locale.US,
-                "001%4d %-5s %-33s %-3s %5d %4d        %4.1f            %3d",
-                p.getPlayerId(),
+                "001%4d %-5s %-33s %-3s %5d %4d %4.1f %3d",
+                p.getId(),
                 p.getGender(),
                 p.getName(),
                 p.getCountry(),
                 p.getRating(),
                 p.getBirthYear(),
-                p.getScore(),
-                p.getRank());
+                (float) p.getExtraPoints(), // use extra points as the "score"
+                p.getKFactor());
     }
 }

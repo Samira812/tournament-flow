@@ -8,8 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "arbiters")
-public class Arbiter {
+@Table(name = "organizers")
+public class Organizer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +22,7 @@ public class Arbiter {
     @Column(name = "fide_id")
     private long fideId;
 
+    @ManyToOne
+    @JoinColumn(name = "tournament_id")
+    private Tournament tournament;
 }

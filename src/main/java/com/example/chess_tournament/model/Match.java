@@ -28,6 +28,8 @@ public class Match {
 
     private String result;
 
+    private boolean isBye;
+
     @ManyToOne
     @JoinColumn(name = "round_id")
     private Round round;

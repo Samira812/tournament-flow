@@ -20,6 +20,9 @@ public class Round {
     @Column(name = "round_number")
     private int roundNumber;
 
+    @Column(name = "round_completed")
+    private boolean completed;
+
     @OneToMany(mappedBy = "round", cascade = CascadeType.ALL)
     private List<Match> matches;
 

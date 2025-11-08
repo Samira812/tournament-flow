@@ -1,52 +1,37 @@
 package com.example.chess_tournament.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
-@Data
+@Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "players")
 public class Player {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // database id
-
-    @Column(name = "player_id")
-    private int playerId; // player's number in TRF
-
-    private String gender;
+    private Long id;
 
     private String name;
-
-    private int rating;
-
-    @Column(name = "birth_year")
-    private int birthYear;
-
     private String country;
+    private int birthYear;
+    private int rating;
+    private String gender;
+    private Long fideId;
+    private String email;
+    private int kFactor;
+    private int extraPoints;
+    private boolean disabled;
 
-    @Column(name = "fide_id")
-    private long fideId;
+    // 0 = not confirmed, 1 = confirmed
+    private int confirmAttendance;
+    @JsonIgnore
 
-    @Column(name = "total_score")
-    private double score;
-
-    private int rank;
-
-    @ManyToOne
-    @JoinColumn(name = "tournament_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tournament_id", nullable = false)
     private Tournament tournament;
-
-    @OneToMany(mappedBy = "whitePlayer", cascade = CascadeType.ALL)
-    private List<Match> matchesAsWhite;
-
-    @OneToMany(mappedBy = "blackPlayer", cascade = CascadeType.ALL)
-    private List<Match> matchesAsBlack;
-
 }
