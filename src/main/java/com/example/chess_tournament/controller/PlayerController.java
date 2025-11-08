@@ -78,7 +78,7 @@ public class PlayerController {
             Player p = new Player();
             p.setTournament(t);
             p.setName(name);
-            p.setCountry("ISR");
+            p.setCountry("PAL");
             p.setBirthYear(2000);
             p.setRating(1200);
             p.setGender("m");
@@ -91,6 +91,7 @@ public class PlayerController {
             list.add(p);
         }
         return ResponseEntity.ok(playerRepository.saveAll(list));
+
     }
 
     @PutMapping("/attendance")
